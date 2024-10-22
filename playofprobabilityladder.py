@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 # Read ELO ratings from CSV file
-file_path = "C:/Users/rrpar/OneDrive/Desktop/Final Four Season 84.csv"
+file_path = "C:/Users/rrpar/OneDrive/Desktop/Final Four Season 84.csv" #change csvv file per season
 elo_df = pd.read_csv(file_path)
 
 # Convert ELO ratings to a dictionary for quick lookups
