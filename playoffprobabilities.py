@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 # Read ELO ratings from CSV file
-file_path = "C:/Users/rrpar/OneDrive/Desktop/Final Four Season 85.csv"
+file_path = "C:/Users/rrpar/OneDrive/Desktop/Final Four Season 85.csv" #change the csv file per season
 elo_df = pd.read_csv(file_path)
 
 # Convert ELO ratings to a dictionary for quick lookups
@@ -74,7 +74,7 @@ def twice_to_beat(higher_seed, lower_seed):
 def best_of_three(team_1, team_2):
     wins_team1, wins_team2 = 0, 0
 
-    # Play up to 3 matches
+    # Play up to 3 matches (Best of 3 Series)
     for _ in range(3):
         winner = simulate_match(team_1, team_2)
         if winner == team_1:
