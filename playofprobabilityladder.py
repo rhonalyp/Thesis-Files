@@ -2,106 +2,70 @@ import pandas as pd
 import numpy as np
 
 # Read ELO ratings from CSV file
-file_path = "C:/Users/rrpar/OneDrive/Desktop/Final Four Season 84.csv" #change csvv file per season
+file_path = "C:/Users/rrpar/OneDrive/Desktop/Final Four Season 84.csv"
 elo_df = pd.read_csv(file_path)
 
 # Convert ELO ratings to a dictionary for quick lookups
 elo = dict(zip(elo_df['Team'], elo_df['Elo']))
 
-# Initialize dictionaries to track sets won and total sets played
-sets_won = {team: 0 for team in elo}
-total_sets_played = {team: 0 for team in elo}
-
-# ELO adjustment factor (K-value)
-K = 50  
-
 # Extract the teams participating in the Final Four from the CSV file
 playoff_teams = list(elo.keys())
 
-# Function to calculate ELO-based win probabilities for both teams
-def calculate_probabilities(team_1, team_2):
+
+# Function to calculate the probability of one team winning a match
+def match_win_probability(team_1, team_2):
     ea_1 = 1 / (1 + 10 ** ((elo[team_2] - elo[team_1]) / 400))
-    ea_2 = 1 / (1 + 10 ** ((elo[team_1] - elo[team_2]) / 400))
+    ea_2 = 1- ea_1 
     return ea_1, ea_2
 
-# Function to simulate a match and update ELO ratings
-def simulate_match(team_1, team_2):
-    num_sets = np.random.randint(3, 6)  # Random number of sets (3 to 5)
+def best_of_three_probability(p_win_1, p_win_2):
+    # Winning probabilities for Team 1
+    p_win_1_2_games = p_win_1 ** 2  # Wins in 2 games
+    p_win_1_3_games = p_win_1 * p_win_2 * p_win_1  # Wins in 3 games (1-0, 1-1, 2-1)
 
-    sets_won_team1, sets_won_team2 = 0, 0
-    for _ in range(num_sets):
-        ea_1, ea_2 = calculate_probabilities(team_1, team_2)
-        outcome = np.random.random()
+    # Winning probabilities for Team 2
+    p_win_2_2_games = p_win_2 ** 2  # Wins in 2 games
+    p_win_2_3_games = p_win_2 * p_win_1 * p_win_2  # Wins in 3 games (1-0, 1-1, 2-1)
 
-        if outcome < ea_1:
-            sets_won_team1 += 1
-        else:
-            sets_won_team2 += 1
+    # Total probabilities
+    p_series_1 = p_win_1_2_games + p_win_1_3_games  # Total probability for Team 1
+    p_series_2 = p_win_2_2_games + p_win_2_3_games  # Total probability for Team 2
 
-    # Update set statistics
-    sets_won[team_1] += sets_won_team1
-    sets_won[team_2] += sets_won_team2
-    total_sets_played[team_1] += num_sets
-    total_sets_played[team_2] += num_sets
+    return p_series_1, p_series_2
+def overall_win_probabilities_stepladder(teams):
+    # Step 1: Team 4 vs Team 3
+    p_4_vs_3, p_3_vs_4 = match_win_probability(teams[3], teams[2])
 
-    # Use SA as the outcome for ELO update
-    sa_1 = sets_won_team1 / num_sets 
-    sa_2 = sets_won_team2 / num_sets 
-    update_elo(team_1, team_2, sa_1, sa_2)
+    # Step 2: Winner of Step 1 faces Team 2
+    p_2_vs_3, p_3_vs_2 = match_win_probability(teams[1], teams[2])
+    p_2_vs_4, p_4_vs_2 = match_win_probability(teams[1], teams[3])
 
-    print(f"[MATCH] {team_1} vs {team_2}:")
-    print(f"  Probabilities: {team_1}: {ea_1:.2f}, {team_2}: {ea_2:.2f}")
-    
-    return team_1 if ea_1 > ea_2 else team_2
+    # Step 3: Calculate conditional probabilities for the finalist
+    p_2_reaches_final = (p_3_vs_4 * p_2_vs_3) + (p_4_vs_3 * p_2_vs_4)
+    p_3_reaches_final = p_3_vs_4 * p_2_vs_3
+    p_4_reaches_final = p_4_vs_3 * p_2_vs_4
 
-# Function to update ELO ratings using SA
-def update_elo(team_1, team_2, sa_1, sa_2):
-    ea_1, ea_2 = calculate_probabilities(team_1, team_2)
+    # Step 4: Finals (Best-of-Three) with Team 1
+    p_1_vs_2, p_2_vs_1 = best_of_three_probability(match_win_probability(teams[0],teams[2])[0], p_2_reaches_final)
+    p_1_vs_3, p_3_vs_1 = best_of_three_probability(match_win_probability(teams[0],teams[2])[0], p_3_reaches_final)
+    p_1_vs_4, p_4_vs_1 = best_of_three_probability(match_win_probability(teams[0],teams[2])[0], p_4_reaches_final)
 
-    elo[team_1] += K * (sa_1 - ea_1)
-    elo[team_2] += K * (sa_2 - ea_2)
+    # Calculate overall tournament win probabilities using conditional outcomes
+    prob_team_1_wins = (
+        p_2_reaches_final * p_1_vs_2 +
+        p_3_reaches_final * p_1_vs_3 +
+        p_4_reaches_final * p_1_vs_4
+    )
+    prob_team_2_wins = p_2_reaches_final * p_2_vs_1
+    prob_team_3_wins = p_3_reaches_final * p_3_vs_1
+    prob_team_4_wins = p_4_reaches_final * p_4_vs_1
 
-# Function to simulate a twice-to-beat playoff round
-def twice_to_beat(higher_seed, lower_seed):
-    first_winner = simulate_match(higher_seed, lower_seed)
-    if first_winner == higher_seed:
-        return higher_seed
-    else:
-        second_winner = simulate_match(higher_seed, lower_seed)
-        return lower_seed if second_winner == lower_seed else higher_seed
+    # Display the results
+    print("\nOverall Tournament Win Probabilities:")
+    print(f"{teams[0]}: {prob_team_1_wins:.4f}")
+    print(f"{teams[1]}: {prob_team_2_wins:.4f}")
+    print(f"{teams[2]}: {prob_team_3_wins:.4f}")
+    print(f"{teams[3]}: {prob_team_4_wins:.4f}")
 
-# Stepladder playoff logic
-def stepladder_playoffs(teams):
-    # Third seed (#3) vs Fourth seed (#4) – Single match elimination
-    print("\n[STEP LADDER ROUND] Third Seed (#3) vs Fourth Seed (#4):")
-    semifinalist = simulate_match(teams[2], teams[3])
-
-    # Winner of step ladder faces the second seed (#2) – Twice to beat
-    print("\n[STEP LADDER ROUND] Winner vs Second Seed (#2):")
-    finalist = twice_to_beat(teams[1], semifinalist)
-
-    # Finalist faces the top seed (#1) in the finals
-    print("\n[FINALS] Top Seed (#1) vs Winner of Step Ladder:")
-    champion = simulate_match(teams[0], finalist)
-
-    return champion
-
-# Function to display final win probabilities and updated ELO ratings
-def display_final_probabilities_and_elo(teams):
-    print("\nFinal Win Probabilities and Updated ELO Ratings:")
-    for team in teams:
-        for opponent in teams:
-            if team != opponent:
-                ea, _ = calculate_probabilities(team, opponent)
-                print(f"{team} vs {opponent}: Win Probability = {ea:.2f}")
-        print(f"{team}: Final ELO = {elo[team]:.2f}")
-
-# Simulate the stepladder playoff format
-elo = dict(zip(elo_df['Team'], elo_df['Elo']))  # Reset ELO ratings
-champion = stepladder_playoffs(playoff_teams)
-
-# Display the champion
-print(f"\nChampion: {champion}")
-
-# Display final probabilities and updated ELO ratings
-display_final_probabilities_and_elo(playoff_teams)
+# Run the tournament simulation with the input CSV data
+overall_win_probabilities_stepladder(playoff_teams)
