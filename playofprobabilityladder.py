@@ -18,7 +18,8 @@ def match_win_probability(team_1, team_2):
     ea_2 = 1- ea_1 
     return ea_1, ea_2
 
-def best_of_three_probability(p_win_1, p_win_2):
+def best_of_three_probability (team1,team2):
+    p_win_1,p_win_2= match_win_probability(team1,team2) 
     # Winning probabilities for Team 1
     p_win_1_2_games = p_win_1 ** 2  # Wins in 2 games
     p_win_1_3_games = p_win_1 * p_win_2 * p_win_1  # Wins in 3 games (1-0, 1-1, 2-1)
@@ -46,10 +47,9 @@ def overall_win_probabilities_stepladder(teams):
     p_4_reaches_final = p_4_vs_3 * p_2_vs_4
 
     # Step 4: Finals (Best-of-Three) with Team 1
-    p_1_vs_2, p_2_vs_1 = best_of_three_probability(match_win_probability(teams[0],teams[2])[0], p_2_reaches_final)
-    p_1_vs_3, p_3_vs_1 = best_of_three_probability(match_win_probability(teams[0],teams[2])[0], p_3_reaches_final)
-    p_1_vs_4, p_4_vs_1 = best_of_three_probability(match_win_probability(teams[0],teams[2])[0], p_4_reaches_final)
-
+    p_1_vs_2, p_2_vs_1 = best_of_three_probability(teams[0],teams[1])
+    p_1_vs_3, p_3_vs_1 = best_of_three_probability(teams[0],teams[2])
+    p_1_vs_4, p_4_vs_1 = best_of_three_probability(teams[0],teams[3])
     # Calculate overall tournament win probabilities using conditional outcomes
     prob_team_1_wins = (
         p_2_reaches_final * p_1_vs_2 +
