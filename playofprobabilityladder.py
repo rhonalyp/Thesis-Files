@@ -21,7 +21,7 @@ playoff_teams = list(elo.keys())
 # Function to calculate ELO-based win probabilities for both teams
 def calculate_probabilities(team_1, team_2):
     ea_1 = 1 / (1 + 10 ** ((elo[team_2] - elo[team_1]) / 400))
-    ea_2 = 1 - ea_1  # Complementary probability
+    ea_2 = 1 / (1 + 10 ** ((elo[team_1] - elo[team_2]) / 400))
     return ea_1, ea_2
 
 # Function to simulate a match and update ELO ratings
@@ -52,7 +52,7 @@ def simulate_match(team_1, team_2):
     print(f"[MATCH] {team_1} vs {team_2}:")
     print(f"  Probabilities: {team_1}: {ea_1:.2f}, {team_2}: {ea_2:.2f}")
     
-    return team_1 if sets_won_team1 > sets_won_team2 else team_2
+    return team_1 if ea_1 > ea_2 else team_2
 
 # Function to update ELO ratings using SA
 def update_elo(team_1, team_2, sa_1, sa_2):
