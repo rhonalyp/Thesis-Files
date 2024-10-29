@@ -70,7 +70,7 @@ for file_path in file_paths:
 teams = pd.concat([df[['team1', 'team2']] for df in all_dataframes]).stack().unique()
 
 # Finding the optimal K factor using MSE
-k_values = range(10, 51, 1)  # Test K values (integers) from 1 to 50
+k_values = range(100, 201, 1)  # Test K values (integers) from 10 to 50
 mse_results = []
 
 for k in k_values:

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 # Read ELO ratings from CSV file
-file_path = "C:/Users/rrpar/OneDrive/Desktop/Final Four Season 81.csv"
+file_path = "C:/Users/rrpar/OneDrive/Desktop/Final Four Season 85.csv"
 elo_df = pd.read_csv(file_path)
 
 # Convert ELO ratings to a dictionary for quick lookups
@@ -22,11 +22,11 @@ def best_of_three_probability(team1,team2):
     p_win_1,p_win_2= match_win_probability(team1,team2) 
     # Winning probabilities for Team 1
     p_win_1_2_games = p_win_1 ** 2  # Wins in 2 games
-    p_win_1_3_games = p_win_1 * p_win_2 * p_win_1  # Wins in 3 games (1-0, 1-1, 2-1)
+    p_win_1_3_games = 2*(p_win_1 * p_win_2 * p_win_1)  # Wins in 3 games (1-0, 1-1, 2-1)
 
     # Winning probabilities for Team 2
     p_win_2_2_games = p_win_2 ** 2  # Wins in 2 games
-    p_win_2_3_games = p_win_2 * p_win_1 * p_win_2  # Wins in 3 games (1-0, 1-1, 2-1)
+    p_win_2_3_games = 2*(p_win_2 * p_win_1 * p_win_2)  # Wins in 3 games (1-0, 1-1, 2-1)
 
     # Total probabilities
     p_series_1 = p_win_1_2_games + p_win_1_3_games  # Total probability for Team 1
@@ -59,6 +59,12 @@ def overall_win_probabilities(teams):
     prob_team_3_wins = prob_3_adv * (prob_1_adv * p_3_vs_1 + prob_4_adv * p_3_vs_4)
     prob_team_4_wins = prob_4_adv * (prob_2_adv * p_4_vs_2 + prob_3_adv * p_4_vs_3)
 
+ # Display the semifinal results
+    print("Semifinals Probabilities:")
+    print(f"{teams[0]}: {prob_1_adv:.4f}")
+    print(f"{teams[1]}: {prob_2_adv:.4f}")
+    print(f"{teams[2]}: {prob_3_adv:.4f}")
+    print(f"{teams[3]}: {prob_4_adv:.4f}")
     # Display the results
     print("\nOverall Tournament Win Probabilities:")
     print(f"{teams[0]}: {prob_team_1_wins:.4f}")

@@ -26,7 +26,9 @@ def get_elo(i):
     # Print current ELO ratings of the opposing teams
     print(f"After match {i + 1} ({team_1} vs {team_2}):")
     print(f"  {team_1}: ELO = {round(elo[team_1], 4)}")
+    print(f"  {team_1}: EA = {round(ea_1, 4)}")
     print(f"  {team_2}: ELO = {round(elo[team_2], 4)}\n")
+    print(f"  {team_2}: EA = {round(ea_2, 4)}")
 
 # File path to the CSV
 file_path = r"C:/Users/rrpar/OneDrive/Desktop/UAAP WVB Eliminations/Season 79 Eliminations.csv"
@@ -47,3 +49,4 @@ for i in range(len(df)):
 print("Final ELO Ratings:")
 for team, rating in elo.items():
     print(f"{team}: ELO = {round(rating, 4)}")
+    
