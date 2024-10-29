@@ -48,4 +48,3 @@ for i in range(len(df)):
 print("Final ELO Ratings:")
 for team, rating in elo.items():
     print(f"{team}: ELO = {round(rating, 4)}")
-#test3
