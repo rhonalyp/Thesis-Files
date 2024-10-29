@@ -15,7 +15,7 @@ def get_elo(i, df,elo, k):
 
     # ELO expected scores
     ea_1 = 1 / (1 + 10 ** ((elo[team_2] - elo[team_1]) / 400))
-    ea_2 = 1 / (1 + 10 ** ((elo[team_1] - elo[team_2]) / 400))
+    ea_2 = 1-ea_1
 
     # Update ELO ratings
     elo[team_1] += k * (S_1 - ea_1)

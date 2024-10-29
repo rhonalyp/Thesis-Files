@@ -54,7 +54,7 @@ def overall_win_probabilities(teams):
     p_4_vs_3, p_3_vs_4 = best_of_three_probability(teams[3],teams[3])
 
     # Calculate overall tournament win probabilities
-    prob_team_1_wins = prob_1_adv * (prob_2_adv * p_2_vs_1 + prob_3_adv * p_1_vs_3)
+    prob_team_1_wins = prob_1_adv * (prob_2_adv * p_1_vs_2 + prob_3_adv * p_1_vs_3)
     prob_team_2_wins = prob_2_adv * (prob_1_adv * p_2_vs_1 + prob_4_adv * p_2_vs_4)
     prob_team_3_wins = prob_3_adv * (prob_1_adv * p_3_vs_1 + prob_4_adv * p_3_vs_4)
     prob_team_4_wins = prob_4_adv * (prob_2_adv * p_4_vs_2 + prob_3_adv * p_4_vs_3)
