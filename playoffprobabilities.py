@@ -59,18 +59,28 @@ def overall_win_probabilities(teams):
     prob_team_3_wins = prob_3_adv * (prob_1_adv * p_3_vs_1 + prob_4_adv * p_3_vs_4)
     prob_team_4_wins = prob_4_adv * (prob_2_adv * p_4_vs_2 + prob_3_adv * p_4_vs_3)
 
- # Display the semifinal results
+   # Store probabilities in a dictionary for sorting
+    tournament_probs = {
+        teams[0]: prob_team_1_wins,
+        teams[1]: prob_team_2_wins,
+        teams[2]: prob_team_3_wins,
+        teams[3]: prob_team_4_wins
+    }
+
+    # Sort teams by their tournament win probabilities in descending order
+    sorted_probs = sorted(tournament_probs.items(), key=lambda x: x[1], reverse=True)
+    
+    # Display the semifinal results
     print("Semifinals Probabilities:")
     print(f"{teams[0]}: {prob_1_adv:.4f}")
+    print(f"{teams[3]}: {prob_4_adv:.4f}")
     print(f"{teams[1]}: {prob_2_adv:.4f}")
     print(f"{teams[2]}: {prob_3_adv:.4f}")
-    print(f"{teams[3]}: {prob_4_adv:.4f}")
-    # Display the results
-    print("\nOverall Tournament Win Probabilities:")
-    print(f"{teams[0]}: {prob_team_1_wins:.4f}")
-    print(f"{teams[1]}: {prob_team_2_wins:.4f}")
-    print(f"{teams[2]}: {prob_team_3_wins:.4f}")
-    print(f"{teams[3]}: {prob_team_4_wins:.4f}")
+
+    # Display the sorted overall tournament win probabilities
+    print("\nOverall Tournament Win Probabilities (Highest to Lowest):")
+    for team, prob in sorted_probs:
+        print(f"{team}: {prob:.4f}")
 
 # Run the tournament simulation with the input CSV data
 overall_win_probabilities(playoff_teams)

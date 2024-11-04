@@ -66,18 +66,30 @@ def overall_win_probabilities_stepladder(teams):
     prob_team_3_wins = p_3_reaches_final * p_3_vs_1
     prob_team_4_wins = p_4_reaches_final * p_4_vs_1
 
-    # Display the semifinals results
+  
+      # Store probabilities in a dictionary for sorting
+    tournament_probs = {
+        teams[0]: prob_team_1_wins,
+        teams[1]: prob_team_2_wins,
+        teams[2]: prob_team_3_wins,
+        teams[3]: prob_team_4_wins
+    }
+  # Display the semifinals results
     print("\nSemifinals Win Probabilities:")
     print(f"{teams[0]}: {1:.4f}")
     print(f"{teams[1]}: {p_2_reaches_final:.4f}")
     print(f"{teams[2]}: {p_3_reaches_final:.4f}")
     print(f"{teams[3]}: {p_4_reaches_final:.4f}")
-    # Display the results
-    print("\nOverall Tournament Win Probabilities:")
-    print(f"{teams[0]}: {prob_team_1_wins:.4f}")
-    print(f"{teams[1]}: {prob_team_2_wins:.4f}")
-    print(f"{teams[2]}: {prob_team_3_wins:.4f}")
-    print(f"{teams[3]}: {prob_team_4_wins:.4f}")
+    
+    # Sort teams by their tournament win probabilities in descending order
+    sorted_probs = sorted(tournament_probs.items(), key=lambda x: x[1], reverse=True)
+
+   
+
+    # Display the sorted overall tournament win probabilities
+    print("\nOverall Tournament Win Probabilities (Highest to Lowest):")
+    for team, prob in sorted_probs:
+        print(f"{team}: {prob:.4f}")
 
 # Run the tournament simulation with the input CSV data
 overall_win_probabilities_stepladder(playoff_teams)

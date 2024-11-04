@@ -47,6 +47,5 @@ for i in range(len(df)):
 
 # Print final ELO ratings for all teams
 print("Final ELO Ratings:")
-for team, rating in elo.items():
+for team, rating in sorted(elo.items(), key=lambda x: x[1], reverse=True):
     print(f"{team}: ELO = {round(rating, 4)}")
-    
