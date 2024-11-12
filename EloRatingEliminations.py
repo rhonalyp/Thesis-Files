@@ -17,7 +17,7 @@ def get_elo(i):
     ea_1 = 1 / (1 + 10 ** ((elo[team_2] - elo[team_1]) / 400))
     ea_2 = 1-ea_1
     # ELO adjustment factor (K-value)
-    k = 50
+    k = 184
 
     # Update ELO ratings
     elo[team_1] += k * (S_1 - ea_1)
@@ -31,7 +31,7 @@ def get_elo(i):
     print(f"  {team_2}: EA = {round(ea_2, 4)}")
 
 # File path to the CSV
-file_path = r"C:/Users/rrpar/OneDrive/Desktop/UAAP WVB Eliminations/Season 79 Eliminations.csv"
+file_path = r"C:/Users/rrpar/OneDrive/Desktop/UAAP WVB Eliminations/Season 84 Eliminations.csv"
 
 # Read the CSV with proper encoding handling
 df = pd.read_csv(file_path, encoding='ISO-8859-1')

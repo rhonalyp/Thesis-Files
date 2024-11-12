@@ -74,13 +74,23 @@ def overall_win_probabilities_stepladder(teams):
         teams[2]: prob_team_3_wins,
         teams[3]: prob_team_4_wins
     }
+   # Round 1 Semifinals
+    print(f"{teams[2]}:{p_3_vs_4:.4f}") 
+    print(f"{teams[3]}:{p_4_vs_3:.4f}")  
+    # Round 2 Semifinals
+    print(f"{teams[1]} vs {teams[2]}:{p_2_vs_3:.4f}, {p_3_vs_2:.4f}")
+    print(f"{teams[1]} vs {teams[3]}:{p_2_vs_4:.4f}, {p_4_vs_2:.4f}") 
   # Display the semifinals results
     print("\nSemifinals Win Probabilities:")
     print(f"{teams[0]}: {1:.4f}")
     print(f"{teams[1]}: {p_2_reaches_final:.4f}")
     print(f"{teams[2]}: {p_3_reaches_final:.4f}")
     print(f"{teams[3]}: {p_4_reaches_final:.4f}")
-    
+
+  # Possible Finals  
+    print(f"{teams[0]} vs {teams[1]}:{p_1_vs_2:.4f}, {p_2_vs_1:.4f}")
+    print(f"{teams[0]} vs {teams[2]}:{p_1_vs_3:.4f}, {p_3_vs_1:.4f}") 
+    print(f"{teams[0]} vs {teams[3]}:{p_1_vs_4:.4f}, {p_4_vs_1:.4f}")
     # Sort teams by their tournament win probabilities in descending order
     sorted_probs = sorted(tournament_probs.items(), key=lambda x: x[1], reverse=True)
 

@@ -69,14 +69,18 @@ def overall_win_probabilities(teams):
 
     # Sort teams by their tournament win probabilities in descending order
     sorted_probs = sorted(tournament_probs.items(), key=lambda x: x[1], reverse=True)
-    
-    # Display the semifinal results
     print("Semifinals Probabilities:")
     print(f"{teams[0]}: {prob_1_adv:.4f}")
     print(f"{teams[3]}: {prob_4_adv:.4f}")
     print(f"{teams[1]}: {prob_2_adv:.4f}")
     print(f"{teams[2]}: {prob_3_adv:.4f}")
 
+    # Possible Finals Match 
+    print("Possible Finals Match")
+    print(f"{teams[0]} vs {teams[1]}: {p_1_vs_2:.4f}, {p_2_vs_1:.4f}")
+    print(f"{teams[0]} vs {teams[2]}: {p_1_vs_3:.4f}, {p_3_vs_1:.4f}")
+    print(f"{teams[1]} vs {teams[3]}: {p_2_vs_4:.4f}, {p_4_vs_2:.4f}")
+    print(f"{teams[2]} vs {teams[3]}: {p_3_vs_4:.4f}, {p_4_vs_3:.4f}")
     # Display the sorted overall tournament win probabilities
     print("\nOverall Tournament Win Probabilities (Highest to Lowest):")
     for team, prob in sorted_probs:
