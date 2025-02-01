@@ -9,3 +9,5 @@ Run RatingforELoModel.py and RatingforModifiedEloModel.py to obtain the Elo Rati
 
 # Playoffs Probabilities
 To get the final four playoff probabilites, use the playoffprobabilities.py and the files in the "playoffs" folder. To Convert Elo ratings to a dictionary for quick lookups, use elo_df['Elo'] for the Elo Model, then change the 'Elo' to 'Modified Elo' for the Modified Elo Model.  The "playoffs" folder contain the 4 teams in the playoff. Since there is a difference in season 84 playoffs format, (stepladder format), run playofprobabilityladder.py instead. 
+
+#
